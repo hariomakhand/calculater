@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Calculator</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(45deg, #0a0a0a, #3a4442);
+            margin: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            border-radius: 16px;
+            background: transparent;
+            box-shadow: 0px 3px 15px rgba(113, 115, 119, 0.5);
+        }
+
+        #result-display {
+            width: 91%;
+            padding: 20px;
+            overflow-x: auto; /* Enable horizontal scrolling */
+            font-size: 2.2rem;
+            text-align: right;
+            color: azure;
+            background: rgba(0, 0, 0, 0.3);
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0px 3px 15px rgba(84, 84, 95, 0.5);
+            margin-bottom: 15px;
+            white-space: nowrap; /* Prevent text wrapping */
+        }
+
+        .buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .button {
+            width: 22%;
+            margin: 10px 0;
+            padding: 15px;
+            font-size: 1.5rem;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0px 3px 15px rgba(84, 84, 95, 0.5);
+            color: beige;
+            transition: transform 0.1s ease, background-color 0.2s ease;
+        }
+
+        .button:active {
+            transform: scale(1.05);
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .operator {
+            color: rgb(214, 233, 8);
+        }
+
+        #btn {
+            background-color: orangered;
+            font-weight: bolder;
+            color: white;
+        }
+
+        @media (max-width: 480px) {
+            #result-display {
+                font-size: 1.8rem;
+                padding: 15px;
+            }
+
+            .button {
+                width: 22%;
+                padding: 12px;
+                font-size: 1.2rem;
+            }
+        }
+
+        h1 {
+            text-align: center;
+            color: antiquewhite;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Calculator</h1>
+        <div id="result-display">0</div>
+        <div class="buttons">
+            <!-- First Row -->
+            <button class="button operator">C</button>
+            <button class="button operator">%</button>
+            <button class="button operator">del</button>
+            <button class="button operator">/</button>
+
+            <!-- Second Row -->
+            <button class="button">7</button>
+            <button class="button">8</button>
+            <button class="button">9</button>
+            <button class="button operator">*</button>
+
+            <!-- Third Row -->
+            <button class="button">4</button>
+            <button class="button">5</button>
+            <button class="button">6</button>
+            <button class="button operator">-</button>
+
+            <!-- Fourth Row -->
+            <button class="button">1</button>
+            <button class="button">2</button>
+            <button class="button">3</button>
+            <button class="button operator">+</button>
+
+            <!-- Fifth Row -->
+            <button class="button">00</button>
+            <button class="button">0</button>
+            <button class="button operator">.</button>
+            <button class="button" id="btn">=</button>
+        </div>
+    </div>
+
+    <script>
+        let display = document.getElementById('result-display');
+        let buttons = document.querySelectorAll(".button");
+        let expression = "";
+
+        buttons.forEach(button => {
+            button.addEventListener("click", (e) => {
+                let value = e.target.innerHTML;
+
+                if (value === '=') {
+                    try {
+                        // Calculate result
+                        expression = eval(expression);
+                        display.innerHTML = expression;
+                    } catch {
+                        // Handle invalid expressions
+                        display.innerHTML = "Error";
+                        expression = "";
+                    }
+                } else if (value === 'C') {
+                    // Clear display
+                    expression = "";
+                    display.innerHTML = "0";
+                } else if (value === 'del') {
+                    // Delete last character
+                    expression = expression.slice(0, -1);
+                    display.innerHTML = expression || "0";
+                } else if (value === '%') {
+                    // Handle percentage
+                    expression += "/100";
+                    display.innerHTML = expression;
+                } else {
+                    // Append value to the expression
+                    if (display.innerHTML === "0") {
+                        expression = value;
+                    } else {
+                        expression += value;
+                    }
+                    display.innerHTML = expression;
+
+                    // Scroll display to the end for longer inputs
+                    display.scrollLeft = display.scrollWidth;
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
